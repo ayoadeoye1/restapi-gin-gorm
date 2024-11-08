@@ -16,5 +16,5 @@ dev:
         fi
 
 start:
-	@go run cmd/api/main.go
+	@go run .
 	

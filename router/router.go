@@ -1,9 +1,10 @@
-package main
+package router
 
 import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	//swagger files
 )
 
 func home(c *gin.Context) {

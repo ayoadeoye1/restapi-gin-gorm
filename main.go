@@ -9,6 +9,7 @@ import (
 	"net/http"
 
 	"github.com/ayoadeoye1/restapi-gin-gorm/helper"
+	"github.com/ayoadeoye1/restapi-gin-gorm/router"
 	"github.com/joho/godotenv"
 )
 
@@ -23,7 +24,7 @@ func main() {
 		log.Fatalf("Invalid port number: %v", err)
 	}
 
-	routes := SetupRouter()
+	routes := router.SetupRouter()
 
 	server := &http.Server{
 		Addr:    fmt.Sprintf(":%d", port),

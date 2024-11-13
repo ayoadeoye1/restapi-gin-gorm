@@ -3,14 +3,16 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"strconv"
-
-	"net/http"
 
 	"github.com/ayoadeoye1/restapi-gin-gorm/helper"
 	"github.com/ayoadeoye1/restapi-gin-gorm/router"
 	"github.com/joho/godotenv"
+
+	//docs
+	_ "github.com/ayoadeoye1/restapi-gin-gorm/docs"
 )
 
 func main() {

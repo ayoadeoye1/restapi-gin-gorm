@@ -1,4 +1,20 @@
 info:
-  contact: {}
-paths: {}
+  contact: {"email":"ayoadeoye.isaac@gmail.com"}
+paths:
+  /:
+    get:
+      consumes:
+      - application/json
+      description: Get a message indicating that the Gin-Gonic server is up and running
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: status message
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Show server running status
+      tags:
+      - server
 swagger: "2.0"

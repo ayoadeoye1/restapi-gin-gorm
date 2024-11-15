@@ -45,10 +45,65 @@
                     "200": {
                         "description": "status message",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/controller.GetUsersResponse"
                         }
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "controller.Address": {
+            "type": "object",
+            "properties": {
+                "City": {
+                    "type": "string"
+                },
+                "State": {
+                    "type": "string"
+                },
+                "Street": {
+                    "type": "string"
+                },
+                "Zip": {
+                    "type": "string"
+                }
+            }
+        },
+        "controller.GetUsersResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/controller.User"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "controller.User": {
+            "type": "object",
+            "properties": {
+                "Address": {
+                    "$ref": "#/definitions/controller.Address"
+                },
+                "Email": {
+                    "type": "string"
+                },
+                "ID": {
+                    "type": "integer"
+                },
+                "Name": {
+                    "type": "string"
+                },
+                "Phone": {
+                    "type": "string"
                 }
             }
         }

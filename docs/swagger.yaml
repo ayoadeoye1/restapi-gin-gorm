@@ -1,3 +1,39 @@
+definitions:
+  controller.Address:
+    properties:
+      City:
+        type: string
+      State:
+        type: string
+      Street:
+        type: string
+      Zip:
+        type: string
+    type: object
+  controller.GetUsersResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/controller.User'
+        type: array
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  controller.User:
+    properties:
+      Address:
+        $ref: '#/definitions/controller.Address'
+      Email:
+        type: string
+      ID:
+        type: integer
+      Name:
+        type: string
+      Phone:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
@@ -28,8 +64,7 @@ paths:
         "200":
           description: status message
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/controller.GetUsersResponse'
       summary: Get list of dummy users
       tags:
       - users

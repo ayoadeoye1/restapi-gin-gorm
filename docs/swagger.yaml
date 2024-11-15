@@ -1,5 +1,5 @@
 info:
-  contact: {"email":"ayoadeoye.isaac@gmail.com"}
+  contact: {}
 paths:
   /:
     get:
@@ -17,4 +17,20 @@ paths:
       summary: Show server running status
       tags:
       - server
+  /api/v1/user:
+    get:
+      consumes:
+      - application/json
+      description: Get list of dummy users from the endpoint
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: status message
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get list of dummy users
+      tags:
+      - users
 swagger: "2.0"

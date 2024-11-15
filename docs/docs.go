@@ -38,6 +38,30 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/v1/user": {
+            "get": {
+                "description": "Get list of dummy users from the endpoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get list of dummy users",
+                "responses": {
+                    "200": {
+                        "description": "status message",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
         }
     }
 }`

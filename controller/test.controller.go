@@ -7,18 +7,18 @@ import (
 )
 
 type Address struct {
-	Street string `json:Street`
-	City   string `json:City`
-	State  string `json:State`
-	Zip    string `json:Zip`
+	Street string `json:"Street"`
+	City   string `json:"City"`
+	State  string `json:"State"`
+	Zip    string `json:"Zip"`
 }
 
 type User struct {
-	ID      int     `json:ID`
-	Name    string  `json:Name`
-	Email   string  `json:Email`
-	Phone   string  `json:Phone`
-	Address Address `json:Address`
+	ID      int     `json:"ID"`
+	Name    string  `json:"Name"`
+	Email   string  `json:"Email"`
+	Phone   string  `json:"Phone"`
+	Address Address `json:"Address"`
 }
 
 type GetUsersResponse struct {

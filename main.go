@@ -7,6 +7,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/ayoadeoye1/restapi-gin-gorm/config"
 	"github.com/ayoadeoye1/restapi-gin-gorm/helper"
 	"github.com/ayoadeoye1/restapi-gin-gorm/router"
 	"github.com/joho/godotenv"
@@ -16,8 +17,12 @@ import (
 )
 
 func main() {
-	if err := godotenv.Load(); err != nil {
-		log.Fatalf("Error loading .env file")
+	// if err := godotenv.Load(); err != nil {
+	// 	log.Fatalf("Error loading .env file")
+	// }
+
+	if err := godotenv.Load("./.env"); err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
 	}
 
 	port, err := strconv.Atoi(os.Getenv("PORT"))
@@ -25,6 +30,9 @@ func main() {
 	if err != nil {
 		log.Fatalf("Invalid port number: %v", err)
 	}
+
+	db := config.ConnectDB()
+	fmt.Println(db)
 
 	routes := router.SetupRouter()
 

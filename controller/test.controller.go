@@ -41,11 +41,12 @@ func Home(c *gin.Context) {
 	})
 }
 
+// GetUsers godoc
 // @Summary Get list of dummy users
-// @Description Get list of dummy users from the endpoint
-// @Tags users
+// @Description Get list of dummy users from the database
 // @Accept json
-// @Produce json
+// @Produce application/json
+// @Tags Users
 // @Success 200 {object} GetUsersResponse "status message"
 // @Router /api/v1/user [get]
 func GetUser(c *gin.Context) {

@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/ayoadeoye1/restapi-gin-gorm/controller"
+	usercontroller "github.com/ayoadeoye1/restapi-gin-gorm/controller/user_controller"
 	"github.com/gin-gonic/gin"
 
 	//swagger files
@@ -9,8 +10,16 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func SetupRouter() *gin.Engine {
+func SetupRouter(userController *usercontroller.UserController) *gin.Engine {
 	routes := gin.Default()
+
+	// routes.Use(cors.New(cors.Config{
+	//     AllowOrigins:     []string{"*"}, github.com/gin-contrib/cors
+	//     AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+	//     AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
+	//     ExposeHeaders:    []string{"Content-Length"},
+	//     AllowCredentials: true,
+	// }))
 
 	routes.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
@@ -18,6 +27,7 @@ func SetupRouter() *gin.Engine {
 
 	router := routes.Group("/api/v1")
 	userRouter := router.Group("/user")
+	userRouter.POST("/", userController.Create)
 
 	userRouter.GET("/", controller.GetUser)
 	return routes

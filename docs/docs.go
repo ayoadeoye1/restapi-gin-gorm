@@ -41,7 +41,7 @@ const docTemplate = `{
         },
         "/api/v1/user": {
             "get": {
-                "description": "Get list of dummy users from the endpoint",
+                "description": "Get list of dummy users from the database",
                 "consumes": [
                     "application/json"
                 ],
@@ -49,7 +49,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "Users"
                 ],
                 "summary": "Get list of dummy users",
                 "responses": {
@@ -57,6 +57,38 @@ const docTemplate = `{
                         "description": "status message",
                         "schema": {
                             "$ref": "#/definitions/controller.GetUsersResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "An endpoint for a new user to sign-up",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Sign-Up New User",
+                "parameters": [
+                    {
+                        "description": "Create Users",
+                        "name": "users",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CreateUserReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.Response"
                         }
                     }
                 }
@@ -114,6 +146,51 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "Phone": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.CreateUserReq": {
+            "type": "object",
+            "required": [
+                "email",
+                "first_name",
+                "last_name",
+                "password"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 1
+                },
+                "last_name": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 1
+                },
+                "occupation": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {},
+                "status": {
                     "type": "string"
                 }
             }

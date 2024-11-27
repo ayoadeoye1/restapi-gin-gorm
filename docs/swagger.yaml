@@ -34,6 +34,38 @@ definitions:
       Phone:
         type: string
     type: object
+  requests.CreateUserReq:
+    properties:
+      address:
+        type: string
+      email:
+        type: string
+      first_name:
+        maxLength: 100
+        minLength: 1
+        type: string
+      last_name:
+        maxLength: 100
+        minLength: 1
+        type: string
+      occupation:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - first_name
+    - last_name
+    - password
+    type: object
+  responses.Response:
+    properties:
+      code:
+        type: integer
+      data: {}
+      status:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
@@ -57,7 +89,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get list of dummy users from the endpoint
+      description: Get list of dummy users from the database
       produces:
       - application/json
       responses:
@@ -67,5 +99,26 @@ paths:
             $ref: '#/definitions/controller.GetUsersResponse'
       summary: Get list of dummy users
       tags:
-      - users
+      - Users
+    post:
+      consumes:
+      - application/json
+      description: An endpoint for a new user to sign-up
+      parameters:
+      - description: Create Users
+        in: body
+        name: users
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Sign-Up New User
+      tags:
+      - Users
 swagger: "2.0"

@@ -6,12 +6,12 @@ import (
 
 type Users struct {
 	ID         int     `gorm:"type:int;primaryKey;autoIncrement"`
-	FirstName  string  `gorm:"type:varchar(255);not null"`
-	LastName   string  `gorm:"type:varchar(255);not null"`
-	Email      string  `gorm:"type:varchar(255);unique;not null"`
-	Password   string  `gorm:"type:varchar(255);not null"`
-	Occupation *string `gorm:"type:varchar(255)"`
-	Address    *string `gorm:"type:varchar(255)"`
+	FirstName  string  `gorm:"type:varchar(255);not null" json:"first_name"`
+	LastName   string  `gorm:"type:varchar(255);not null" json:"last_name"`
+	Email      string  `gorm:"type:varchar(255);unique;not null" json:"email"`
+	Password   string  `gorm:"type:varchar(255);not null" json:"password"`
+	Occupation *string `gorm:"type:varchar(255)" json:"occupation"`
+	Address    *string `gorm:"type:varchar(255)" json:"address"`
 
 	//time stamps
 	CreatedAt time.Time `gorm:"type:datetime;autoCreateTime"`

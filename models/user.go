@@ -14,8 +14,8 @@ type Users struct {
 	Address    *string `gorm:"type:varchar(255)" json:"address"`
 
 	//time stamps
-	CreatedAt time.Time `gorm:"type:datetime;autoCreateTime"`
-	UpdatedAt time.Time `gorm:"type:datetime;autoUpdateTime"`
+	CreatedAt time.Time `gorm:"autoCreateTime"`
+	UpdatedAt time.Time `gorm:"autoUpdateTime"`
 
 	//associations
 	Otp *Otp `gorm:"foreignKey:UserID"`

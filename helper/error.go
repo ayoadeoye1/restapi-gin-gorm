@@ -1,9 +1,11 @@
 package helper
 
-import "fmt"
+// import "fmt"
 
-func ErrorPanic(err error) {
+func ErrorPanic(err error) error {
 	if err != nil {
-		panic(fmt.Sprintf("Panic Error: %d", err))
+		// panic(fmt.Sprintf("Panic Error: %d", err))
+		return err
 	}
+	return nil
 }

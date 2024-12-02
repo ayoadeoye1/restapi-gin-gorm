@@ -1,7 +1,7 @@
 package usercontroller
 
 import (
-	"log"
+	"fmt"
 	"net/http"
 
 	"github.com/ayoadeoye1/restapi-gin-gorm/data/requests"
@@ -31,7 +31,8 @@ func NewUserController(userService userservice.UserServiceImpl) *UserController 
 // @Success 200 {object} responses.Response{}
 // @Router /api/v1/user [post]
 func (userController *UserController) Create(ctx *gin.Context) {
-	log.Fatal(">>> create user")
+	// log.Fatal(">>> create user") //Avoid This!
+	fmt.Println(">>> create user")
 	createUserRequest := requests.CreateUserReq{}
 	err := ctx.ShouldBindJSON(&createUserRequest)
 	helper.ErrorPanic(err)

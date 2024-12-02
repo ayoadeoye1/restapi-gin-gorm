@@ -2,7 +2,7 @@ package userservice
 
 import (
 	"github.com/ayoadeoye1/restapi-gin-gorm/data/requests"
-	"github.com/ayoadeoye1/restapi-gin-gorm/helper"
+	// "github.com/ayoadeoye1/restapi-gin-gorm/helper"
 	"github.com/ayoadeoye1/restapi-gin-gorm/models"
 	userrepository "github.com/ayoadeoye1/restapi-gin-gorm/repository/user_repository"
 	"github.com/go-playground/validator/v10"
@@ -20,9 +20,12 @@ func NewUserServiceImpl(userRepository userrepository.UserRepo, validate *valida
 	}
 }
 
-func (u *UserServiceImpl) Create(users requests.CreateUserReq) {
+func (u *UserServiceImpl) Create(users requests.CreateUserReq) error {
 	err := u.Validate.Struct(users)
-	helper.ErrorPanic(err)
+	if err != nil {
+		return err
+	}
+
 	userModel := models.Users{
 		FirstName:  users.FirstName,
 		LastName:   users.LastName,
@@ -32,4 +35,5 @@ func (u *UserServiceImpl) Create(users requests.CreateUserReq) {
 		Address:    users.Address,
 	}
 	u.UserRepository.Add(userModel)
+	return nil
 }

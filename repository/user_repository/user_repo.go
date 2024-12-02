@@ -1,7 +1,6 @@
 package userrepository
 
 import (
-	"github.com/ayoadeoye1/restapi-gin-gorm/helper"
 	"github.com/ayoadeoye1/restapi-gin-gorm/models"
 	"gorm.io/gorm"
 )
@@ -14,27 +13,40 @@ func NewUserRepoImpl(Db *gorm.DB) UserRepo {
 	return &UserRepoImpl{Db: Db}
 }
 
-func (u *UserRepoImpl) Add(users models.Users) {
+func (u *UserRepoImpl) Add(users models.Users) error {
 	result := u.Db.Create(&users)
-	helper.ErrorPanic(result.Error)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
 }
 
-// Edit implements UserRepo.
-func (u *UserRepoImpl) Edit(users models.Users) {
-	panic("unimplemented")
+func (u *UserRepoImpl) Edit(users models.Users) error {
+	result := u.Db.Save(&users)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
 }
 
-// FindAll implements UserRepo.
 func (u *UserRepoImpl) FindAll(userId int) []models.Users {
-	panic("unimplemented")
+	var users []models.Users
+	u.Db.Where("id = ?", userId).Find(&users)
+	return users
 }
 
-// FindById implements UserRepo.
 func (u *UserRepoImpl) FindById(userId int) (users models.Users, err error) {
-	panic("unimplemented")
+	result := u.Db.First(&users, userId)
+	if result.Error != nil {
+		return users, result.Error
+	}
+	return users, nil
 }
 
-// Remove implements UserRepo.
-func (u *UserRepoImpl) Remove(userId int) {
-	panic("unimplemented")
+func (u *UserRepoImpl) Remove(userId int) error {
+	result := u.Db.Delete(&models.Users{}, userId)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
 }

@@ -3,12 +3,15 @@ package usercontroller
 import (
 	"fmt"
 	"net/http"
+	"os"
+	"strconv"
 
 	"github.com/ayoadeoye1/restapi-gin-gorm/data/requests"
 	"github.com/ayoadeoye1/restapi-gin-gorm/data/responses"
 	"github.com/ayoadeoye1/restapi-gin-gorm/helper"
 	userservice "github.com/ayoadeoye1/restapi-gin-gorm/services/user_service"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserController struct {
@@ -36,6 +39,19 @@ func (userController *UserController) Create(ctx *gin.Context) {
 	createUserRequest := requests.CreateUserReq{}
 	err := ctx.ShouldBindJSON(&createUserRequest)
 	helper.ErrorPanic(err)
+
+	salt, err := strconv.Atoi(os.Getenv("BCRYPT_SALT"))
+	if err != nil {
+		helper.ErrorPanic(fmt.Errorf("get env error: %v", err))
+	}
+
+	fmt.Println(">>> create user", createUserRequest)
+	hash, err := bcrypt.GenerateFromPassword([]byte(createUserRequest.Password), salt)
+	helper.ErrorPanic(err)
+
+	fmt.Println("HASHHHHHH", string(hash))
+
+	createUserRequest.Password = string(hash)
 
 	userController.userService.Create(createUserRequest)
 	jsonResponse := responses.Response{

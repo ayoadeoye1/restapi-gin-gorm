@@ -190,6 +190,10 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "data": {},
+                "error": {},
+                "message": {
+                    "type": "string"
+                },
                 "status": {
                     "type": "string"
                 }

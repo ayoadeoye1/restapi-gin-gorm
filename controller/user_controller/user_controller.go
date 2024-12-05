@@ -7,7 +7,6 @@ import (
 	"strconv"
 
 	"github.com/ayoadeoye1/restapi-gin-gorm/data/requests"
-	"github.com/ayoadeoye1/restapi-gin-gorm/data/responses"
 	"github.com/ayoadeoye1/restapi-gin-gorm/helper"
 	userservice "github.com/ayoadeoye1/restapi-gin-gorm/services/user_service"
 	"github.com/gin-gonic/gin"
@@ -34,7 +33,6 @@ func NewUserController(userService userservice.UserServiceImpl) *UserController 
 // @Success 200 {object} responses.Response{}
 // @Router /api/v1/user [post]
 func (userController *UserController) Create(ctx *gin.Context) {
-	// log.Fatal(">>> create user") //Avoid This!
 	fmt.Println(">>> create user")
 	createUserRequest := requests.CreateUserReq{}
 	err := ctx.ShouldBindJSON(&createUserRequest)
@@ -45,20 +43,12 @@ func (userController *UserController) Create(ctx *gin.Context) {
 		helper.ErrorPanic(fmt.Errorf("get env error: %v", err))
 	}
 
-	fmt.Println(">>> create user", createUserRequest)
 	hash, err := bcrypt.GenerateFromPassword([]byte(createUserRequest.Password), salt)
 	helper.ErrorPanic(err)
-
-	fmt.Println("HASHHHHHH", string(hash))
 
 	createUserRequest.Password = string(hash)
 
 	userController.userService.Create(createUserRequest)
-	jsonResponse := responses.Response{
-		Code:   http.StatusOK,
-		Status: "Success",
-		Data:   nil,
-	}
-	ctx.Header("Content-Type", "application/json")
-	ctx.JSON(http.StatusOK, jsonResponse)
+
+	helper.SendSuccess(ctx, http.StatusOK, "Sign Up Successful", nil)
 }

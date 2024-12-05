@@ -10,6 +10,7 @@ import (
 	"github.com/ayoadeoye1/restapi-gin-gorm/helper"
 	userservice "github.com/ayoadeoye1/restapi-gin-gorm/services/user_service"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -36,15 +37,32 @@ func (userController *UserController) Create(ctx *gin.Context) {
 	fmt.Println(">>> create user")
 	createUserRequest := requests.CreateUserReq{}
 	err := ctx.ShouldBindJSON(&createUserRequest)
-	helper.ErrorPanic(err)
+	if err != nil {
+		helper.SendError(ctx, int(http.StateIdle), "Internal Error, Please Try Again", err)
+		return
+	}
+
+	validate := validator.New()
+
+	err = validate.Struct(createUserRequest)
+	if err != nil {
+		// validationErrors := formatValidationErrors(err)
+		helper.SendError(ctx, http.StatusBadRequest, "Validation Error", error(err))
+		fmt.Print("EEEEEEEEÊ", err)
+		return
+	}
 
 	salt, err := strconv.Atoi(os.Getenv("BCRYPT_SALT"))
 	if err != nil {
-		helper.ErrorPanic(fmt.Errorf("get env error: %v", err))
+		helper.SendError(ctx, int(http.StateIdle), "Internal Error, Please Try Again", err)
+		return
 	}
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(createUserRequest.Password), salt)
-	helper.ErrorPanic(err)
+	if err != nil {
+		helper.SendError(ctx, int(http.StateIdle), "Internal Error, Please Try Again", err)
+		return
+	}
 
 	createUserRequest.Password = string(hash)
 

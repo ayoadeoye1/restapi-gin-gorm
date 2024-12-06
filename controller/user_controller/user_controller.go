@@ -38,7 +38,7 @@ func (userController *UserController) Create(ctx *gin.Context) {
 	createUserRequest := requests.CreateUserReq{}
 	err := ctx.ShouldBindJSON(&createUserRequest)
 	if err != nil {
-		helper.SendError(ctx, int(http.StateIdle), "Internal Error, Please Try Again", err)
+		helper.SendError(ctx, http.StatusBadRequest, "Internal Error, Please Try Again", err.Error())
 		return
 	}
 
@@ -46,21 +46,26 @@ func (userController *UserController) Create(ctx *gin.Context) {
 
 	err = validate.Struct(createUserRequest)
 	if err != nil {
-		// validationErrors := formatValidationErrors(err)
-		helper.SendError(ctx, http.StatusBadRequest, "Validation Error", error(err))
-		fmt.Print("EEEEEEEEÊ", err)
+		// validationErrors := helper.FormatValidationErrors(err)
+		// helper.SendError(ctx, http.StatusBadRequest, "Validation Error", validationErrors)
+		if validationErrs, ok := err.(validator.ValidationErrors); ok {
+			formattedErrors := helper.FormatValidationErrors(validationErrs)
+			helper.SendError(ctx, http.StatusBadRequest, "Validation Error", formattedErrors)
+		} else {
+			helper.SendError(ctx, http.StatusBadRequest, "Invalid JSON input", err.Error())
+		}
 		return
 	}
 
 	salt, err := strconv.Atoi(os.Getenv("BCRYPT_SALT"))
 	if err != nil {
-		helper.SendError(ctx, int(http.StateIdle), "Internal Error, Please Try Again", err)
+		helper.SendError(ctx, http.StatusBadRequest, "Internal Error, Please Try Again", err.Error())
 		return
 	}
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(createUserRequest.Password), salt)
 	if err != nil {
-		helper.SendError(ctx, int(http.StateIdle), "Internal Error, Please Try Again", err)
+		helper.SendError(ctx, http.StatusBadRequest, "Internal Error, Please Try Again", err.Error())
 		return
 	}
 

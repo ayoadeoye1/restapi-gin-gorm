@@ -33,7 +33,7 @@ func NewUserController(userService userservice.UserServiceImpl) *UserController 
 // @Tags Users
 // @Success 200 {object} responses.Response{}
 // @Router /api/v1/user [post]
-func (userController *UserController) Create(ctx *gin.Context) {
+func (userController *UserController) CreateUser(ctx *gin.Context) {
 	fmt.Println(">>> create user")
 	createUserRequest := requests.CreateUserReq{}
 	err := ctx.ShouldBindJSON(&createUserRequest)
@@ -79,7 +79,7 @@ func (userController *UserController) Create(ctx *gin.Context) {
 // UserSignIn godoc
 // @Summary Sign-In User
 // @Description An endpoint for a user to sign-in
-// @Param users body requests.LoginReq true "Users SignIn"
+// @Param users body requests.LoginReq true "User SignIn"
 // @Accept json
 // @Produce application/json
 // @Tags Users
@@ -87,8 +87,8 @@ func (userController *UserController) Create(ctx *gin.Context) {
 // @Router /api/v1/user [post]
 func (userController *UserController) SignIn(ctx *gin.Context) {
 	fmt.Println(">>> create user")
-	createUserRequest := requests.CreateUserReq{}
-	err := ctx.ShouldBindJSON(&createUserRequest)
+	LoginReq := requests.LoginReq{}
+	err := ctx.ShouldBindJSON(&LoginReq)
 	if err != nil {
 		helper.SendError(ctx, http.StatusBadRequest, "Internal Error, Please Try Again", err.Error())
 		return
@@ -96,7 +96,7 @@ func (userController *UserController) SignIn(ctx *gin.Context) {
 
 	validate := validator.New()
 
-	err = validate.Struct(createUserRequest)
+	err = validate.Struct(LoginReq)
 	if err != nil {
 		// validationErrors := helper.FormatValidationErrors(err)
 		// helper.SendError(ctx, http.StatusBadRequest, "Validation Error", validationErrors)
@@ -109,21 +109,11 @@ func (userController *UserController) SignIn(ctx *gin.Context) {
 		return
 	}
 
-	salt, err := strconv.Atoi(os.Getenv("BCRYPT_SALT"))
-	if err != nil {
-		helper.SendError(ctx, http.StatusBadRequest, "Internal Error, Please Try Again", err.Error())
-		return
-	}
+	//Find User
 
-	hash, err := bcrypt.GenerateFromPassword([]byte(createUserRequest.Password), salt)
-	if err != nil {
-		helper.SendError(ctx, http.StatusBadRequest, "Internal Error, Please Try Again", err.Error())
-		return
-	}
+	//Verify Password
 
-	createUserRequest.Password = string(hash)
-
-	userController.userService.Create(createUserRequest)
+	//Generate JWT Token
 
 	helper.SendSuccess(ctx, http.StatusOK, "Sign Up Successful", nil)
 }

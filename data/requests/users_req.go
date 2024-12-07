@@ -8,3 +8,8 @@ type CreateUserReq struct {
 	Occupation *string `json:"occupation"`
 	Address    *string `json:"address"`
 }
+
+type LoginReq struct {
+	Email    string `validate:"required,email" json:"email"`
+	Password string `validate:"required" json:"password"`
+}

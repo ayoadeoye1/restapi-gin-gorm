@@ -75,3 +75,55 @@ func (userController *UserController) Create(ctx *gin.Context) {
 
 	helper.SendSuccess(ctx, http.StatusOK, "Sign Up Successful", nil)
 }
+
+// UserSignIn godoc
+// @Summary Sign-In User
+// @Description An endpoint for a user to sign-in
+// @Param users body requests.LoginReq true "Users SignIn"
+// @Accept json
+// @Produce application/json
+// @Tags Users
+// @Success 200 {object} responses.Response{}
+// @Router /api/v1/user [post]
+func (userController *UserController) SignIn(ctx *gin.Context) {
+	fmt.Println(">>> create user")
+	createUserRequest := requests.CreateUserReq{}
+	err := ctx.ShouldBindJSON(&createUserRequest)
+	if err != nil {
+		helper.SendError(ctx, http.StatusBadRequest, "Internal Error, Please Try Again", err.Error())
+		return
+	}
+
+	validate := validator.New()
+
+	err = validate.Struct(createUserRequest)
+	if err != nil {
+		// validationErrors := helper.FormatValidationErrors(err)
+		// helper.SendError(ctx, http.StatusBadRequest, "Validation Error", validationErrors)
+		if validationErrs, ok := err.(validator.ValidationErrors); ok {
+			formattedErrors := helper.FormatValidationErrors(validationErrs)
+			helper.SendError(ctx, http.StatusBadRequest, "Validation Error", formattedErrors)
+		} else {
+			helper.SendError(ctx, http.StatusBadRequest, "Invalid JSON input", err.Error())
+		}
+		return
+	}
+
+	salt, err := strconv.Atoi(os.Getenv("BCRYPT_SALT"))
+	if err != nil {
+		helper.SendError(ctx, http.StatusBadRequest, "Internal Error, Please Try Again", err.Error())
+		return
+	}
+
+	hash, err := bcrypt.GenerateFromPassword([]byte(createUserRequest.Password), salt)
+	if err != nil {
+		helper.SendError(ctx, http.StatusBadRequest, "Internal Error, Please Try Again", err.Error())
+		return
+	}
+
+	createUserRequest.Password = string(hash)
+
+	userController.userService.Create(createUserRequest)
+
+	helper.SendSuccess(ctx, http.StatusOK, "Sign Up Successful", nil)
+}

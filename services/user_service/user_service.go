@@ -37,3 +37,8 @@ func (u *UserServiceImpl) Create(users requests.CreateUserReq) error {
 	u.UserRepository.Add(userModel)
 	return nil
 }
+
+func (u *UserServiceImpl) FindByEmail(userEmail requests.CreateUserReq) error {
+	u.UserRepository.FindByEmail(userEmail.Email)
+	return nil
+}

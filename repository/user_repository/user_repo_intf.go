@@ -7,5 +7,6 @@ type UserRepo interface {
 	Edit(users models.Users) error
 	FindAll(userId int) []models.Users
 	FindById(userId int) (users models.Users, err error)
+	FindByEmail(userEmail string) (users models.Users, err error)
 	Remove(userId int) error
 }

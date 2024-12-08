@@ -11,5 +11,6 @@ type UserService interface {
 	Update(user models.Users)
 	Delete(userId int)
 	FindById(userId int) (user responses.UserResponse, err error)
+	FindByEmail(userEmail string) (user responses.UserResponse, err error)
 	FindAll() (users []responses.UserResponse, err error)
 }

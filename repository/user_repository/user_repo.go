@@ -43,6 +43,14 @@ func (u *UserRepoImpl) FindById(userId int) (users models.Users, err error) {
 	return users, nil
 }
 
+func (u *UserRepoImpl) FindByEmail(userEmail string) (users models.Users, err error) {
+	result := u.Db.First(&users, userEmail)
+	if result.Error != nil {
+		return users, result.Error
+	}
+	return users, nil
+}
+
 func (u *UserRepoImpl) Remove(userId int) error {
 	result := u.Db.Delete(&models.Users{}, userId)
 	if result.Error != nil {

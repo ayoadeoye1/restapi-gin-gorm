@@ -58,6 +58,16 @@ definitions:
     - last_name
     - password
     type: object
+  requests.LoginReq:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
   responses.Response:
     properties:
       code:
@@ -103,6 +113,29 @@ paths:
       summary: Get list of dummy users
       tags:
       - Users
+  /api/v1/user/signin:
+    post:
+      consumes:
+      - application/json
+      description: An endpoint for a user to sign-in
+      parameters:
+      - description: User SignIn
+        in: body
+        name: users
+        required: true
+        schema:
+          $ref: '#/definitions/requests.LoginReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Sign-In User
+      tags:
+      - Users
+  /api/v1/user/signup:
     post:
       consumes:
       - application/json

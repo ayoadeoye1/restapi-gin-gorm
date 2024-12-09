@@ -33,7 +33,7 @@ func NewUserController(userService userservice.UserServiceImpl) *UserController 
 // @Produce application/json
 // @Tags Users
 // @Success 200 {object} responses.Response{}
-// @Router /api/v1/user [post]
+// @Router /api/v1/user/signup [post]
 func (userController *UserController) CreateUser(ctx *gin.Context) {
 	fmt.Println(">>> create user")
 	createUserRequest := requests.CreateUserReq{}
@@ -85,7 +85,7 @@ func (userController *UserController) CreateUser(ctx *gin.Context) {
 // @Produce application/json
 // @Tags Users
 // @Success 200 {object} responses.Response{}
-// @Router /api/v1/user [post]
+// @Router /api/v1/user/signin [post]
 func (userController *UserController) SignIn(ctx *gin.Context) {
 	fmt.Println(">>> create user")
 	LoginReq := requests.LoginReq{}
@@ -99,8 +99,6 @@ func (userController *UserController) SignIn(ctx *gin.Context) {
 
 	err = validate.Struct(LoginReq)
 	if err != nil {
-		// validationErrors := helper.FormatValidationErrors(err)
-		// helper.SendError(ctx, http.StatusBadRequest, "Validation Error", validationErrors)
 		if validationErrs, ok := err.(validator.ValidationErrors); ok {
 			formattedErrors := helper.FormatValidationErrors(validationErrs)
 			helper.SendError(ctx, http.StatusBadRequest, "Validation Error", formattedErrors)

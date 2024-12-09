@@ -43,24 +43,6 @@ func (u *UserServiceImpl) Create(users requests.CreateUserReq) error {
 	return nil
 }
 
-// func (u *UserServiceImpl) FindByEmail(userEmail string) (user responses.UserResponse, err error) {
-// 	user, err := u.UserRepository.FindByEmail(userEmail)
-// 	if err != nil {
-// 		return responses.UserResponse{}, err
-// 	}
-
-// 	userResponse := responses.UserResponse{
-// 		ID:         user.ID,
-// 		FirstName:  user.FirstName,
-// 		LastName:   user.LastName,
-// 		Email:      user.Email,
-// 		Occupation: user.Occupation,
-// 		Address:    user.Address,
-// 	}
-
-// 	return userResponse, nil
-// }
-
 func (u *UserServiceImpl) FindByEmail(userEmail string) (responses.UserResponse, error) {
 	user, err := u.UserRepository.FindByEmail(userEmail)
 	if err != nil {

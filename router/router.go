@@ -27,7 +27,8 @@ func SetupRouter(userController *usercontroller.UserController) *gin.Engine {
 
 	router := routes.Group("/api/v1")
 	userRouter := router.Group("/user")
-	userRouter.POST("/", userController.CreateUser)
+	userRouter.POST("/signup", userController.CreateUser)
+	userRouter.POST("/signin", userController.SignIn)
 
 	userRouter.GET("/", controller.GetUser)
 	return routes

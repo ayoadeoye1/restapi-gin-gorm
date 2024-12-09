@@ -60,7 +60,43 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
+            }
+        },
+        "/api/v1/user/signin": {
+            "post": {
+                "description": "An endpoint for a user to sign-in",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Sign-In User",
+                "parameters": [
+                    {
+                        "description": "User SignIn",
+                        "name": "users",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.LoginReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/signup": {
             "post": {
                 "description": "An endpoint for a new user to sign-up",
                 "consumes": [
@@ -176,6 +212,21 @@ const docTemplate = `{
                     "minLength": 1
                 },
                 "occupation": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.LoginReq": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
                     "type": "string"
                 },
                 "password": {

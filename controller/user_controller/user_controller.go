@@ -110,6 +110,16 @@ func (userController *UserController) SignIn(ctx *gin.Context) {
 	}
 
 	//Find User
+	loginUser, err := userController.userService.UserRepository.FindByEmail(LoginReq.Email)
+	if err != nil {
+		helper.SendError(ctx, http.StatusBadRequest, "Error occured while searching for user", err.Error())
+		return
+	}
+
+	if loginUser == nil {
+		helper.SendError(ctx, http.StatusBadRequest, "Account with email does not exist", nil)
+		return
+	}
 
 	//Verify Password
 

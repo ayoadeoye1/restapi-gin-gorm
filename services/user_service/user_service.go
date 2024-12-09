@@ -1,7 +1,12 @@
 package userservice
 
 import (
+	"errors"
+
 	"github.com/ayoadeoye1/restapi-gin-gorm/data/requests"
+	"github.com/ayoadeoye1/restapi-gin-gorm/data/responses"
+	"gorm.io/gorm"
+
 	// "github.com/ayoadeoye1/restapi-gin-gorm/helper"
 	"github.com/ayoadeoye1/restapi-gin-gorm/models"
 	userrepository "github.com/ayoadeoye1/restapi-gin-gorm/repository/user_repository"
@@ -38,7 +43,41 @@ func (u *UserServiceImpl) Create(users requests.CreateUserReq) error {
 	return nil
 }
 
-func (u *UserServiceImpl) FindByEmail(userEmail requests.CreateUserReq) error {
-	u.UserRepository.FindByEmail(userEmail.Email)
-	return nil
+// func (u *UserServiceImpl) FindByEmail(userEmail string) (user responses.UserResponse, err error) {
+// 	user, err := u.UserRepository.FindByEmail(userEmail)
+// 	if err != nil {
+// 		return responses.UserResponse{}, err
+// 	}
+
+// 	userResponse := responses.UserResponse{
+// 		ID:         user.ID,
+// 		FirstName:  user.FirstName,
+// 		LastName:   user.LastName,
+// 		Email:      user.Email,
+// 		Occupation: user.Occupation,
+// 		Address:    user.Address,
+// 	}
+
+// 	return userResponse, nil
+// }
+
+func (u *UserServiceImpl) FindByEmail(userEmail string) (responses.UserResponse, error) {
+	user, err := u.UserRepository.FindByEmail(userEmail)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return responses.UserResponse{}, errors.New("user not found")
+		}
+		return responses.UserResponse{}, err
+	}
+
+	userResponse := responses.UserResponse{
+		ID:         user.ID,
+		FirstName:  user.FirstName,
+		LastName:   user.LastName,
+		Email:      user.Email,
+		Occupation: user.Occupation,
+		Address:    user.Address,
+	}
+
+	return userResponse, nil
 }

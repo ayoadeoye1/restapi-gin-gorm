@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/ayoadeoye1/restapi-gin-gorm/data/requests"
+	"github.com/ayoadeoye1/restapi-gin-gorm/data/responses"
 	"github.com/ayoadeoye1/restapi-gin-gorm/helper"
 	userservice "github.com/ayoadeoye1/restapi-gin-gorm/services/user_service"
 	"github.com/gin-gonic/gin"
@@ -110,13 +111,13 @@ func (userController *UserController) SignIn(ctx *gin.Context) {
 	}
 
 	//Find User
-	loginUser, err := userController.userService.UserRepository.FindByEmail(LoginReq.Email)
+	loginUser, err := userController.userService.FindByEmail(LoginReq.Email)
 	if err != nil {
 		helper.SendError(ctx, http.StatusBadRequest, "Error occured while searching for user", err.Error())
 		return
 	}
 
-	if loginUser == nil {
+	if loginUser == (responses.UserResponse{}) {
 		helper.SendError(ctx, http.StatusBadRequest, "Account with email does not exist", nil)
 		return
 	}

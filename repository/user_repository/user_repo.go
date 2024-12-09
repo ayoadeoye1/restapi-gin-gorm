@@ -1,6 +1,8 @@
 package userrepository
 
 import (
+	"errors"
+
 	"github.com/ayoadeoye1/restapi-gin-gorm/models"
 	"gorm.io/gorm"
 )
@@ -29,27 +31,37 @@ func (u *UserRepoImpl) Edit(users models.Users) error {
 	return nil
 }
 
-func (u *UserRepoImpl) FindAll(userId int) []models.Users {
+func (u *UserRepoImpl) FindAll(userId int) ([]models.Users, error) {
 	var users []models.Users
-	u.Db.Where("id = ?", userId).Find(&users)
-	return users
-}
-
-func (u *UserRepoImpl) FindById(userId int) (users models.Users, err error) {
-	result := u.Db.First(&users, userId)
+	result := u.Db.Where("id = ?", userId).Find(&users)
 	if result.Error != nil {
-		return users, result.Error
+		return nil, result.Error
 	}
 	return users, nil
 }
 
-func (u *UserRepoImpl) FindByEmail(userEmail string) (*models.Users, error) {
-	var users models.Users
-	result := u.Db.Where("email = ?", userEmail).First(&users)
+func (u *UserRepoImpl) FindById(userId int) (*models.Users, error) {
+	var user models.Users
+	result := u.Db.First(&user, userId)
 	if result.Error != nil {
-		return &users, result.Error
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return nil, gorm.ErrRecordNotFound
+		}
+		return nil, result.Error
 	}
-	return &users, nil
+	return &user, nil
+}
+
+func (u *UserRepoImpl) FindByEmail(userEmail string) (*models.Users, error) {
+	var user models.Users
+	result := u.Db.Where("email = ?", userEmail).First(&user)
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return nil, gorm.ErrRecordNotFound
+		}
+		return nil, result.Error
+	}
+	return &user, nil
 }
 
 func (u *UserRepoImpl) Remove(userId int) error {

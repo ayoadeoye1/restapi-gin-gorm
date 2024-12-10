@@ -57,6 +57,7 @@ func (u *UserServiceImpl) FindByEmail(userEmail string) (responses.UserResponse,
 		FirstName:  user.FirstName,
 		LastName:   user.LastName,
 		Email:      user.Email,
+		Password:   user.Password,
 		Occupation: user.Occupation,
 		Address:    user.Address,
 	}

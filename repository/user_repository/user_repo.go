@@ -57,9 +57,9 @@ func (u *UserRepoImpl) FindByEmail(userEmail string) (*models.Users, error) {
 	result := u.Db.Where("email = ?", userEmail).First(&user)
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			return &models.Users{}, nil // No user found, return empty user with no error
+			return &models.Users{}, nil
 		}
-		return &models.Users{}, result.Error // Other errors
+		return &models.Users{}, result.Error
 	}
 	return &user, nil
 }

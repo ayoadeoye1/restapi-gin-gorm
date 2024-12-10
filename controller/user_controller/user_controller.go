@@ -133,6 +133,12 @@ func (userController *UserController) SignIn(ctx *gin.Context) {
 		return
 	}
 
+	fmt.Println("Stored Hash:", loginUser)
+	fmt.Println("Input Password:", LoginReq.Password)
+
+	// Debugging byte slices
+	fmt.Printf("Stored Hash Bytes: %v\n", []byte(loginUser.Password))
+	fmt.Printf("Input Password Bytes: %v\n", []byte(LoginReq.Password))
 	//Verify Password
 	err = bcrypt.CompareHashAndPassword([]byte(loginUser.Password), []byte(LoginReq.Password))
 	if err != nil {
@@ -145,7 +151,16 @@ func (userController *UserController) SignIn(ctx *gin.Context) {
 		"sub": loginUser.Email,
 		"exp": time.Now().Add(time.Hour * 24 * 7).Unix(),
 	})
-	// tokenString := token.SigningString()
 
-	helper.SendSuccess(ctx, http.StatusOK, "Sign Up Successful", nil)
+	secret, err := strconv.Atoi(os.Getenv("JWT_SECRET"))
+	if err != nil {
+		helper.SendError(ctx, http.StatusBadRequest, "Getting env error", err.Error())
+	}
+
+	tokenString, err := token.SignedString(secret)
+	if err != nil {
+		helper.SendError(ctx, http.StatusBadRequest, "Signing token error", err.Error())
+	}
+
+	helper.SendSuccess(ctx, http.StatusOK, "Sign Up Successful", tokenString)
 }

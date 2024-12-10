@@ -132,6 +132,11 @@ func (userController *UserController) SignIn(ctx *gin.Context) {
 	}
 
 	//Verify Password
+	err = bcrypt.CompareHashAndPassword([]byte(loginUser.Password), []byte(LoginReq.Password))
+	if err != nil {
+		helper.SendError(ctx, http.StatusBadRequest, "Incorrect password", err.Error())
+		return
+	}
 
 	//Generate JWT Token
 

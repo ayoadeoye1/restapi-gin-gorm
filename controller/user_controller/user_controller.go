@@ -58,6 +58,17 @@ func (userController *UserController) CreateUser(ctx *gin.Context) {
 		return
 	}
 
+	loginUser, err := userController.userService.FindByEmail(createUserRequest.Email)
+	if err != nil {
+		helper.SendError(ctx, http.StatusBadRequest, "Error occured while searching for user email", err.Error())
+		return
+	}
+
+	if loginUser != (responses.UserResponse{}) {
+		helper.SendError(ctx, http.StatusBadRequest, "Account with email already exist", nil)
+		return
+	}
+
 	salt, err := strconv.Atoi(os.Getenv("BCRYPT_SALT"))
 	if err != nil {
 		helper.SendError(ctx, http.StatusBadRequest, "Internal Error, Please Try Again", err.Error())

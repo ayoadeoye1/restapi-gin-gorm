@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/ayoadeoye1/restapi-gin-gorm/data/requests"
 	"github.com/ayoadeoye1/restapi-gin-gorm/data/responses"
@@ -12,6 +13,7 @@ import (
 	userservice "github.com/ayoadeoye1/restapi-gin-gorm/services/user_service"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -139,6 +141,11 @@ func (userController *UserController) SignIn(ctx *gin.Context) {
 	}
 
 	//Generate JWT Token
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"sub": loginUser.Email,
+		"exp": time.Now().Add(time.Hour * 24 * 7).Unix(),
+	})
+	// tokenString := token.SigningString()
 
 	helper.SendSuccess(ctx, http.StatusOK, "Sign Up Successful", nil)
 }

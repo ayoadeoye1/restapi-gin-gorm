@@ -1,8 +1,10 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
 
+	"github.com/ayoadeoye1/restapi-gin-gorm/helper"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -23,36 +25,25 @@ func verifyToken(tokenString string) (*jwt.Token, error) {
 	return token, nil
 }
 
-func authMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		tokenString := c.GetHeader("Authorization")
+func authMiddleware(c *gin.Context) {
+	tokenString := c.GetHeader("Authorization") //c.Cookie()
+	// if err != nil {
+	// 	fmt.Println("Token missing in cookie")
+	// 	// c.Redirect(http.StatusSeeOther, "/login")
+	// 	// c.Abort()
+	// 	helper.SendError(c, http.StatusBadRequest, "Authorization Token is missing in the header/cookie")
+	// 	return
+	// }
 
-		// Parse the token
-		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-				return nil, http.ErrAbortHandler
-			}
-			secretKey := 
-			return []byte(secretKey), nil
-		})
-
-		if err != nil || !token.Valid {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-			c.Abort() // Stop further processing if unauthorized
-			return
-		}
-
-		// Set the token claims to the context
-		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-			c.Set("claims", claims)
-		} else {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-			c.Abort()
-			return
-		}
-
-		c.Next() // Proceed to the next handler if authorized
+	token, err := verifyToken(tokenString)
+	if err != nil {
+		fmt.Println("Token missing in cookie")
+		helper.SendError(c, http.StatusBadRequest, "Authorization Token coud not be verified", err.Error())
+		return
 	}
+
+	fmt.Printf("Token verified successfully. Claims: %+v\\n", token.Claims)
+	c.Next()
 }
 
 // func adminMiddleware() gin.HandlerFunc {

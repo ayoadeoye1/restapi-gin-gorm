@@ -154,8 +154,8 @@ func (userController *UserController) SignIn(ctx *gin.Context) {
 	}
 
 	//Cookie Auth
-	ctx.SetSameSite(http.SameSiteLaxMode)
-	ctx.SetCookie("Authorization", tokenString, int(time.Hour)*24*3, "", "", true, true)
+	// ctx.SetSameSite(http.SameSiteLaxMode)
+	// ctx.SetCookie("Authorization", tokenString, int(time.Hour)*24*3, "", "", true, true)
 
-	helper.SendSuccess(ctx, http.StatusOK, "Sign Up Successful", nil)
+	helper.SendSuccess(ctx, http.StatusOK, "Sign Up Successful", tokenString)
 }

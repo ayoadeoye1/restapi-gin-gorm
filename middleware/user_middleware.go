@@ -1,35 +1,42 @@
 package middleware
 
-// func authMiddleware() gin.HandlerFunc {
-//  return func(c *gin.Context) {
-//   tokenString := c.GetHeader("Authorization")
+import (
+	"net/http"
 
-//   // Parse the token
-//   token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-//    if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-//     return nil, http.ErrAbortHandler
-//    }
-//    return []byte(secretKey), nil
-//   })
+	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
+)
 
-//   if err != nil || !token.Valid {
-//    c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-//    c.Abort() // Stop further processing if unauthorized
-//    return
-//   }
+func authMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		tokenString := c.Cookie("Authorization") //GetHeader
 
-//   // Set the token claims to the context
-//   if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-//    c.Set("claims", claims)
-//   } else {
-//    c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-//    c.Abort()
-//    return
-//   }
+		// Parse the token
+		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, http.ErrAbortHandler
+			}
+			return []byte(secretKey), nil
+		})
 
-//   c.Next() // Proceed to the next handler if authorized
-//  }
-// }
+		if err != nil || !token.Valid {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+			c.Abort() // Stop further processing if unauthorized
+			return
+		}
+
+		// Set the token claims to the context
+		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+			c.Set("claims", claims)
+		} else {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+			c.Abort()
+			return
+		}
+
+		c.Next() // Proceed to the next handler if authorized
+	}
+}
 
 // func adminMiddleware() gin.HandlerFunc {
 //  return func(c *gin.Context) {

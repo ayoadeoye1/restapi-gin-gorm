@@ -3,6 +3,7 @@ package middleware
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/ayoadeoye1/restapi-gin-gorm/helper"
 	"github.com/gin-gonic/gin"
@@ -11,7 +12,7 @@ import (
 
 func verifyToken(tokenString string) (*jwt.Token, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		return , nil
+		return os.Getenv("JWT_SECRET"), nil
 	})
 
 	if err != nil {
@@ -25,7 +26,7 @@ func verifyToken(tokenString string) (*jwt.Token, error) {
 	return token, nil
 }
 
-func authMiddleware(c *gin.Context) {
+func UserAuth(c *gin.Context) {
 	tokenString := c.GetHeader("Authorization") //c.Cookie()
 	// if err != nil {
 	// 	fmt.Println("Token missing in cookie")
@@ -37,7 +38,6 @@ func authMiddleware(c *gin.Context) {
 
 	token, err := verifyToken(tokenString)
 	if err != nil {
-		fmt.Println("Token missing in cookie")
 		helper.SendError(c, http.StatusBadRequest, "Authorization Token coud not be verified", err.Error())
 		return
 	}

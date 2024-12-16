@@ -11,7 +11,7 @@ import (
 
 func verifyToken(tokenString string) (*jwt.Token, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		return secretKey, nil
+		return , nil
 	})
 
 	if err != nil {

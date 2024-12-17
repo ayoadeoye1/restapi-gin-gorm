@@ -4,6 +4,8 @@ import (
 	"github.com/ayoadeoye1/restapi-gin-gorm/controller"
 	usercontroller "github.com/ayoadeoye1/restapi-gin-gorm/controller/user_controller"
 	"github.com/gin-gonic/gin"
+	"github.com/go-openapi/spec"
+	"github.com/go-openapi/swag"
 
 	//swagger files
 	swaggerFiles "github.com/swaggo/files"
@@ -22,6 +24,15 @@ func SetupRouter(userController *usercontroller.UserController) *gin.Engine {
 	// }))
 
 	routes.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	doc := swag.GetSwagger()
+	doc.SecurityDefinitions = map[string]*spec.SecurityScheme{
+		"BearerAuth": {
+			Type:        "apiKey",
+			Name:        "Authorization",
+			In:          "header",
+			Description: "Enter token as 'Bearer <token>'",
+		},
+	}
 
 	routes.GET("/", controller.Home)
 

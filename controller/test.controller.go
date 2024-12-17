@@ -47,7 +47,10 @@ func Home(c *gin.Context) {
 // @Accept json
 // @Produce application/json
 // @Tags Users
+// @Security BearerAuth
 // @Success 200 {object} GetUsersResponse "status message"
+// @Failure 401 {object} ErrorResponse "unauthorized"
+// @Failure 403 {object} ErrorResponse "forbidden"
 // @Router /api/v1/user [get]
 func GetUser(c *gin.Context) {
 	users := []User{

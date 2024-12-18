@@ -28,14 +28,17 @@ func verifyToken(tokenString string) (*jwt.Token, error) {
 }
 
 func UserAuth(c *gin.Context) {
-	tokenString := c.GetHeader("Authorization") //c.Cookie()
-	// if err != nil {
-	// 	fmt.Println("Token missing in cookie")
-	// 	// c.Redirect(http.StatusSeeOther, "/login")
-	// 	// c.Abort()
-	// 	helper.SendError(c, http.StatusBadRequest, "Authorization Token is missing in the header/cookie")
-	// 	return
-	// }
+	tokenString := c.GetHeader("Authorization")
+	if tokenString == "" {
+		token, err := c.Cookie("Authorization")
+		if err != nil {
+			helper.SendError(c, http.StatusBadRequest, "Authorization Token is missing in the header/cookie", err.Error())
+			c.Redirect(http.StatusSeeOther, "/login")
+			c.Abort()
+			return
+		}
+		tokenString = token
+	}
 
 	token, err := verifyToken(tokenString)
 	if err != nil {

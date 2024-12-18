@@ -39,6 +39,7 @@ func UserAuth(c *gin.Context) {
 	token, err := verifyToken(tokenString)
 	if err != nil {
 		helper.SendError(c, http.StatusBadRequest, "Authorization Token coud not be verified", err.Error())
+		c.Abort()
 		return
 	}
 

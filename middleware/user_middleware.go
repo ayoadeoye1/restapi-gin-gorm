@@ -50,18 +50,3 @@ func UserAuth(c *gin.Context) {
 	fmt.Printf("Token verified successfully. Claims: %+v\\n", token.Claims)
 	c.Next()
 }
-
-// func adminMiddleware() gin.HandlerFunc {
-//  return func(c *gin.Context) {
-//   claims := c.MustGet("claims").(jwt.MapClaims)
-//   role := claims["role"].(string)
-
-//   if role != "admin" {
-//    c.JSON(http.StatusForbidden, gin.H{"error": "Forbidden"})
-//    c.Abort()
-//    return
-//   }
-
-//   c.Next()
-//  }
-// }

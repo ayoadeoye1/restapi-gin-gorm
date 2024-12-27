@@ -50,3 +50,31 @@ func UserAuth(c *gin.Context) {
 	fmt.Printf("Token verified successfully. Claims: %+v\\n", token.Claims)
 	c.Next()
 }
+
+func AdminAuth(c *gin.Context) {
+	tokenString := c.GetHeader("Authorization")
+	if tokenString == "" {
+		helper.SendError(c, http.StatusBadRequest, "Authorization Token is missing in the header", nil)
+	}
+
+	token, err := verifyToken(tokenString)
+	if err != nil {
+		helper.SendError(c, http.StatusBadRequest, "Authorization Token coud not be verified", err.Error())
+		c.Abort()
+		return
+	}
+
+	claims := token.Claims.(jwt.MapClaims)
+
+	role := claims["role"].(string)
+	if role != "admin" {
+		helper.SendError(c, http.StatusForbidden, "Forbidden, You Cannot Access This Endpoint", nil)
+		c.Abort()
+		return
+	}
+
+	userID := claims["id"].(float64)
+	c.Set("userID", uint(userID))
+
+	c.Next()
+}

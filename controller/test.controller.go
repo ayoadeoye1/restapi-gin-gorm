@@ -51,7 +51,7 @@ func Home(c *gin.Context) {
 // @Success 200 {object} GetUsersResponse "status message"
 // @Failure 401 {object} ErrorResponse "unauthorized"
 // @Failure 403 {object} ErrorResponse "forbidden"
-// @Router /api/v1/user [get]
+// @Router /api/v1/user/dummy [get]
 func GetUser(c *gin.Context) {
 	users := []User{
 		{

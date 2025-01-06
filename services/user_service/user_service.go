@@ -74,16 +74,17 @@ func (u *UserServiceImpl) FindAll() ([]responses.UserResponse, error) {
 		return []responses.UserResponse{}, err
 	}
 
-	var usersResponse: []
+	var usersResponse []responses.UserResponse
 
-	usersResponse = []responses.UserResponse{
-		ID:         user.ID,
-		FirstName:  user.FirstName,
-		LastName:   user.LastName,
-		Email:      user.Email,
-		Password:   user.Password,
-		Occupation: user.Occupation,
-		Address:    user.Address,
+	for _, user := range users {
+		usersResponse = append(usersResponse, responses.UserResponse{
+			ID:         user.ID,
+			FirstName:  user.FirstName,
+			LastName:   user.LastName,
+			Email:      user.Email,
+			Occupation: user.Occupation,
+			Address:    user.Address,
+		})
 	}
 
 	return usersResponse, nil

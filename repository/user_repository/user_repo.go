@@ -31,9 +31,9 @@ func (u *UserRepoImpl) Edit(users models.Users) error {
 	return nil
 }
 
-func (u *UserRepoImpl) FindAll(userId int) ([]models.Users, error) {
+func (u *UserRepoImpl) FindAll() ([]models.Users, error) {
 	var users []models.Users
-	result := u.Db.Where("id = ?", userId).Find(&users)
+	result := u.Db.Find(&users)
 	if result.Error != nil {
 		return nil, result.Error
 	}

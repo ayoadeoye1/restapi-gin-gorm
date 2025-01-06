@@ -64,3 +64,25 @@ func (u *UserServiceImpl) FindByEmail(userEmail string) (responses.UserResponse,
 
 	return userResponse, nil
 }
+
+func (u *UserServiceImpl) FindAll() ([]responses.UserResponse, error) {
+	user, err := u.UserRepository.FindAll()
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return []responses.UserResponse{}, errors.New("user not found")
+		}
+		return []responses.UserResponse{}, err
+	}
+
+	userResponse := []responses.UserResponse{
+		ID:         user.ID,
+		FirstName:  user.FirstName,
+		LastName:   user.LastName,
+		Email:      user.Email,
+		Password:   user.Password,
+		Occupation: user.Occupation,
+		Address:    user.Address,
+	}
+
+	return userResponse, nil
+}

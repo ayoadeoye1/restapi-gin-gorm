@@ -66,7 +66,7 @@ func (u *UserServiceImpl) FindByEmail(userEmail string) (responses.UserResponse,
 }
 
 func (u *UserServiceImpl) FindAll() ([]responses.UserResponse, error) {
-	user, err := u.UserRepository.FindAll()
+	users, err := u.UserRepository.FindAll()
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return []responses.UserResponse{}, errors.New("user not found")
@@ -74,7 +74,9 @@ func (u *UserServiceImpl) FindAll() ([]responses.UserResponse, error) {
 		return []responses.UserResponse{}, err
 	}
 
-	userResponse := []responses.UserResponse{
+	var usersResponse: []
+
+	usersResponse = []responses.UserResponse{
 		ID:         user.ID,
 		FirstName:  user.FirstName,
 		LastName:   user.LastName,
@@ -84,5 +86,5 @@ func (u *UserServiceImpl) FindAll() ([]responses.UserResponse, error) {
 		Address:    user.Address,
 	}
 
-	return userResponse, nil
+	return usersResponse, nil
 }

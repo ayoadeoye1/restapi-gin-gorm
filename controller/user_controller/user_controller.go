@@ -159,3 +159,24 @@ func (userController *UserController) SignIn(ctx *gin.Context) {
 
 	helper.SendSuccess(ctx, http.StatusOK, "Sign Up Successful", tokenString)
 }
+
+// GetUsers godoc
+// @Summary Get list of app users
+// @Description Get list of users from the database
+// @Accept json
+// @Produce application/json
+// @Tags Admin
+// @Security BearerAuth
+// @Success 200 {object} responses.UserResponse "status message"
+// @Failure 401 {object} ErrorResponse "unauthorized"
+// @Failure 403 {object} ErrorResponse "forbidden"
+// @Router /api/v1/admin/users [get]
+func (userController *UserController) GetUsers(ctx *gin.Context) {
+	users, err := userController.userService.FindAll()
+	if err != nil {
+		helper.SendError(ctx, http.StatusBadRequest, "Error occured while searching for user", err.Error())
+		return
+	}
+
+	helper.SendSuccess(ctx, http.StatusOK, "Fetch users successful", users)
+}

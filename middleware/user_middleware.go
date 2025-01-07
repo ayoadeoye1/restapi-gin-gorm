@@ -31,6 +31,7 @@ func UserAuth(c *gin.Context) {
 	tokenString := c.GetHeader("Authorization")
 	if tokenString == "" {
 		token, err := c.Cookie("Authorization")
+		fmt.Printf("Using Cookie Auth Token: %s", token)
 		if err != nil {
 			helper.SendError(c, http.StatusBadRequest, "Authorization Token is missing in the header/cookie", err.Error())
 			c.Redirect(http.StatusSeeOther, "/login")

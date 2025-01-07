@@ -79,6 +79,23 @@ definitions:
       status:
         type: string
     type: object
+  responses.UserResponse:
+    properties:
+      address:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+      occupation:
+        type: string
+      password:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
@@ -98,7 +115,24 @@ paths:
       summary: Show server running status
       tags:
       - server
-  /api/v1/user:
+  /api/v1/user/admin:
+    get:
+      consumes:
+      - application/json
+      description: Get list of users from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: status message
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+      security:
+      - BearerAuth: []
+      summary: Get list of app users
+      tags:
+      - Admin
+  /api/v1/user/dummy:
     get:
       consumes:
       - application/json
@@ -110,6 +144,8 @@ paths:
           description: status message
           schema:
             $ref: '#/definitions/controller.GetUsersResponse'
+      security:
+      - BearerAuth: []
       summary: Get list of dummy users
       tags:
       - Users

@@ -168,9 +168,7 @@ func (userController *UserController) SignIn(ctx *gin.Context) {
 // @Tags Admin
 // @Security BearerAuth
 // @Success 200 {object} responses.UserResponse "status message"
-// @Failure 401 {object} ErrorResponse "unauthorized"
-// @Failure 403 {object} ErrorResponse "forbidden"
-// @Router /api/v1/admin/users [get]
+// @Router /api/v1/user/admin [get]
 func (userController *UserController) GetUsers(ctx *gin.Context) {
 	users, err := userController.userService.FindAll()
 	if err != nil {

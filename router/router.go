@@ -33,8 +33,8 @@ func SetupRouter(userController *usercontroller.UserController) *gin.Engine {
 
 	userRouter.Use(middleware.UserAuth)
 	{
-		userRouter.GET("/", controller.GetUser)
-		userRouter.GET("/signin", userController.GetUsers)
+		userRouter.GET("/dummy", controller.GetUser)
+		userRouter.GET("/admin", userController.GetUsers)
 	}
 
 	return routes
